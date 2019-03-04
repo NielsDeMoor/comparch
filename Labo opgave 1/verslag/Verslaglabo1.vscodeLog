@@ -1,0 +1,11 @@
+
+
+! Package minted Error: You must invoke LaTeX with the -shell-escape flag.
+
+See the minted package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 \setminted
+               [vhdl]{fontsize=\small}
+? 

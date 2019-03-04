@@ -1,0 +1,163 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\mytitle}{CPU vs GPU Benchmarking} % chktex 8
+\newcommand{\mysubtitle}{Labo 1} % chktex 8
+\newcommand{\myauthor}{Niels De Moor \& Poppe Thomas} % chktex 8
+\newcommand{\mycourse}{Geavanceerde computerarchitectuur} % chktex 8
+
+
+
+\documentclass[11pt,a4paper,twoside]{article} % "twoside" for double sided printing
+\usepackage[dutch]{babel}                   % Culturally-determined typographical rules
+\usepackage[utf8x]{inputenc}                % Input accents characters from keyboard
+\usepackage{amsmath}                        % Math stuff
+\usepackage{graphicx}                       % Insertion of pictures
+\usepackage[colorinlistoftodos]{todonotes}  % Todo notes
+
+\usepackage[a4paper,margin=3cm,marginparwidth=2.5cm]{geometry}   % Paper size and margins
+
+\usepackage[labelfont=bf]{caption}          % Caption labels in bold
+
+%\usepackage{minted}                         % Syntax highlighting
+%\setminted[nasm]{linenos=true,frame=lines,fontsize=\footnotesize,framesep=2mm,tabsize=3,breaklines=true}
+
+\usepackage{soul}							% Highlight with \hl{}
+
+\usepackage{hyperref}                       % Hyperlinks in table of contents and links
+\def\UrlBreaks{\do\/ \do-} % chktex 21		% Let Hyperlinks break at / and -
+
+\setlength{\parindent}{0em}                 % No new paragraph indentation
+\setlength{\parskip}{1em}                   % Space between paragraphs
+
+\usepackage{lastpage}                       % Last page reference
+
+\usepackage{booktabs}						% Toprule, midrule, bottomrule
+
+%\usepackage{chngcntr}						% Alternate figure and table numbering
+%\counterwithin{figure}{section}				% Label figures by section
+%\counterwithin{table}{section}				% Label tables by section
+\usepackage{minted}
+\setminted[vhdl]{fontsize=\small}
+\usepackage{fancyhdr}                       % Fancy headers & footers
+\pagestyle{fancy}                           % Enable fancy headers
+\fancyhf{}                                  % Clear all headers and footers
+\renewcommand{\headrulewidth}{1pt}          % Enable header line
+\renewcommand{\footrulewidth}{1pt}          % Enable footer line
+\fancyhead[C]{\mycourse{}: \mysubtitle{}: \mytitle} % Set new header center
+\fancyfoot[LO,RE]{\myauthor} 
+% Set new page numbering left even right oneven
+\fancyfoot[LE,RO]{\thepage{} van~\pageref{LastPage}} 
+% Redefine plain style, it is used for pages with new chapters
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[LE,RO]{\thepage{} van~\pageref{LastPage}}
+    \fancyfoot[LO,RE]{\myauthor} 
+    \fancyhead[C]{\mycourse{}: \mysubtitle{}: \mytitle} 
+    \renewcommand{\headrulewidth}{1pt}
+    \renewcommand{\footrulewidth}{1pt}
+}
+
+\usepackage[T1]{fontenc}                    % All underscores use ttt font
+
+\usepackage[nottoc,notlot,notlof]{tocbibind} % Make references show up in table of contents
+
+\usepackage{tocloft}                        % Add dots to all lines in table of contents
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\usepackage[electronic]{ifsym}			    % Rising edge symbols
+
+\usepackage{tcolorbox}  					% Colored boxes (methods, ...)
+\tcbset{toptitle = 1mm, bottomtitle = 0.5mm, fonttitle = \bfseries} % Slightly more space above and below title, bold title
+
+\usepackage{standalone}						% Import standalone documents
+
+% From other tex file:
+\usepackage{tikz}							% Block diagram
+\usetikzlibrary{positioning}				% Block diagram
+\usetikzlibrary{shapes.geometric, arrows, positioning, fit}   % Block diagram
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\tikzstyle{subroutine} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=orange!80]
+\tikzstyle{bar} 1 args = [ fill=orange!80, draw = black, fit={(#1.south) (#1.north)}, inner ysep=1.5pt] % Change ysep according to scaling... -- Use with subroutine: \node (bar) [bar={sub1}] at (sub1.west) {}; or `east'
+
+
+
+\begin{document}
+
+\begin{titlepage}																			
+	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Change thickness of lines																																		
+	\center{} % Center everything on the page
+																																
+	%----------------------------------------------------------------------------------------
+	%	TITLE PAGE
+	%----------------------------------------------------------------------------------------
+																																				
+	\includegraphics[scale=0.55]{logo_kuleuven.png}\\
+	\textsc{\large faculty of engineering technology\\-- gent --}\\[2cm]
+																																				
+	\textsc{\LARGE \MakeUppercase{\mycourse}}\\[0.25cm] % Major heading - course name
+	\textsc{\Large \MakeLowercase{\mysubtitle}}\\[0.25cm] % Minor heading - course title
+																																				
+	\HRule \\[0.7cm] % chktex 1
+	{ \huge \bfseries \mytitle}	\\[0.4cm] % Title of your document
+	\HRule \\[1.4cm] % chktex 1
+																																				
+	\Large \myauthor \\[0.4cm] % chktex 1
+	\large MELICTEES
+	\\[1.4cm]
+																																				
+	{\Large \today }\\[1.4cm] % Date, change the \today to a set date if you want to be precise
+																						
+	%\todo[inline, color=green!40]{Scalen pagina bij afdrukken uitzetten}
+																																
+	%\vfill % Fill the rest of the page with whitespace
+																																				
+\end{titlepage}
+ ,
+
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents
+\vspace{1cm}
+
+%\clearpage
+
+
+
+%----------------------------------------------------------------------------------------
+%	>>>>> START DOCUMENT <<<<<
+%----------------------------------------------------------------------------------------
+
+\clearpage
+
+\section{Inleiding}
+
+
+
+%\inputminted{asm}{code/code_7seg_8.dda}
+
+\section{Besluit}
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+			
+%\begin{thebibliography}{9}
+%	\bibitem{8086-regs} Compsecurityconcepts, \textit{8086 Microprocessor Basics}, \\
+ %   \url{https://compsecurityconcepts.wordpress.com/tag/8086-microprocessor/}
+%\end{thebibliography}
+
+	
+
+\end{document}
